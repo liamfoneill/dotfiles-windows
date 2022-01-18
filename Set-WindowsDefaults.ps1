@@ -2,7 +2,7 @@
 param (
     [Parameter(Mandatory = $true, HelpMessage = "A name from 3 to 15 characters for your Windows PC.")]
     [ValidateLength(3, 15)]
-    [string]$ComputerName = "LIAM-DESKTOP",
+    [string]$ComputerName = "liam-desktop",
 
 
     [Parameter(HelpMessage = "A list of linux distributions you wish to enable")]
@@ -76,6 +76,22 @@ if (!(Test-Path -Path '~\Repositories')) {
 
 #Clean Up Desktop
 Remove-Item -path ~\Desktop -include *.lnk -Recurse
+
+###############################################################################
+### SSH Settings                                                        #
+###############################################################################
+# Create a folder for .ssh
+if (!(Test-Path -Path '~\.ssh')) { 
+    New-Item -ItemType Directory -Path '~\.ssh' -Force 
+}
+
+# Create SSH Key
+& "ssh-keygen" -t ed25519 -C $ComputerName -f ~\.ssh\ed25519
+
+# Setup Windows Service for SSH Agent
+Get-Service ssh-agent | Set-Service -StartupType Automatic -PassThru | Start-Service
+$ "start-ssh-agent.cmd"
+
 
 ###############################################################################
 ### Windows Subsystem for Linux                                               #
