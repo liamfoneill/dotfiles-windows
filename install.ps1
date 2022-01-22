@@ -12,7 +12,7 @@ param (
     [Parameter(HelpMessage = "Path to Winget Import JSON file")]
     [string]$WingetImportFile = ".\winget-packages\winget-common.json",
 
-    [Parameter()]
+    [Parameter(HelpMessage= "Computer Type - acceptable values are 'Physical' or 'Virtual'")]
     [ValidateSet("Physical", "Virtual")]
     [string]$ComputerType = "Physical"
 
@@ -66,13 +66,13 @@ if (!(Test-Path -Path '~\Repositories')) {
     New-Item -ItemType Directory -Path '~\Repositories' -Force 
 }
 
-.\PowerShell Helper\Scripts\Set-QuickAccess.ps1 -Action "Pin" -Path "c:\Users\$env:USERNAME\Pictures"
-.\PowerShell Helper\Scripts\Set-QuickAccess.ps1 -Action "Pin" -Path "c:\Users\$env:USERNAME\Videos"
-.\PowerShell Helper\Scripts\Set-QuickAccess.ps1 -Action "Pin" -Path "c:\Users\$env:USERNAME\Repositories"
-.\PowerShell Helper\Scripts\Set-QuickAccess.ps1 -Action "Pin" -Path "c:\Users\$env:USERNAME\Documents"
-.\PowerShell Helper\Scripts\Set-QuickAccess.ps1 -Action "Pin" -Path "c:\Users\$env:USERNAME\Downloads"
-.\PowerShell Helper\Scripts\Set-QuickAccess.ps1 -Action "Pin" -Path "c:\Users\$env:USERNAME\Desktop"
-.\PowerShell Helper\Scripts\Set-QuickAccess.ps1 -Action "Pin" -Path "c:\Users\$env:USERNAME"
+.\powershell-helper-scripts\Set-QuickAccess.ps1 -Action "Pin" -Path "c:\Users\$env:USERNAME\Pictures"
+.\powershell-helper-scripts\Set-QuickAccess.ps1 -Action "Pin" -Path "c:\Users\$env:USERNAME\Videos"
+.\powershell-helper-scripts\Set-QuickAccess.ps1 -Action "Pin" -Path "c:\Users\$env:USERNAME\Repositories"
+.\powershell-helper-scripts\Set-QuickAccess.ps1 -Action "Pin" -Path "c:\Users\$env:USERNAME\Documents"
+.\powershell-helper-scripts\Set-QuickAccess.ps1 -Action "Pin" -Path "c:\Users\$env:USERNAME\Downloads"
+.\powershell-helper-scripts\Set-QuickAccess.ps1 -Action "Pin" -Path "c:\Users\$env:USERNAME\Desktop"
+.\powershell-helper-scripts\Set-QuickAccess.ps1 -Action "Pin" -Path "c:\Users\$env:USERNAME\"
 
 #Clean Up Desktop
 Remove-Item -path ~\Desktop -include *.lnk -Recurse
