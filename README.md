@@ -12,8 +12,9 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser
 
 ## 5 Step Plan for Success:
 
-1. Go to the Windows Store and get the 'App Installer' app from Microsoft. Once installed open up a shell and run 'winget' to make sure it installed correctly and is on your PATH
-2. Clone this repo into your user folder (even if you normally clone repos into a different folder like ~\Repositories). You can do this without needing GIT installed by running these powershell command in an admin window:
+1. Go to the Windows Store and get the 'App Installer' app from Microsoft. Once installed open up a shell and run ```winget --version``` to make sure it installed correctly and is on your PATH
+
+2. Clone this repo into your user folder (even if you normally clone repos into a different folder like ~\Repositories). You can do this without needing GIT installed by running these PowerShell command in an admin window:
 
 ```posh
 $url = "https://github.com/liamfoneill/dotfiles-windows/archive/main.zip"
