@@ -10,7 +10,7 @@ param (
     [string[]]$WSLDistributions = @("Ubuntu", "Debian"),
 
     [Parameter(HelpMessage = "Path to Winget Import JSON file")]
-    [string]$WingetImportFile = "winget-common.json",
+    [string]$WingetImportFile = ".\winget-packages\winget-common.json",
 
     [Parameter()]
     [ValidateSet("Physical", "Virtual")]
@@ -117,7 +117,7 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManage
 Set-ExecutionPolicy Unrestricted -Scope Process -Force
 choco feature enable -n allowGlobalConfirmation
 
-& "choco" install cascadiacode terraform
+& "choco" install cascadiacode terraform starship #These packages are unfortunately still not on Winget as Winget
 
 Write-Host "Importing Winget Packages..." -ForegroundColor "Yellow"
 & "winget" import --import-file $WingetImportFile --accept-package-agreements --accept-source-agreements
@@ -175,8 +175,28 @@ Remove-Variable MU
 # Disable Recycle Bin
 New-ItemProperty -path $RegKey -name { 645FF040-5081-101B-9F08-00AA002F954E } -value 1 -PropertyType String
 
+# Copy Windows Terminal Settings
+Copy-Item -Path ".\windows-terminal\settings.json" -Destination "C:\Users\$env:UserName\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json" 
+
+# Copy PowerShell Profile
+Copy-Item -Path .\powershell-profile\Microsoft.PowerShell_profile.ps1 -Destination "C:\Users\$env:USERNAME\Documents\PowerShell"
+
+# Create Personal Profile for Edge
+profilePath = "profile-personal"
+Start-Process -FilePath "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" -ArgumentList "--profile-directory=$profilePath --no-first-run --no-default-browser-check"
+
+# Create Work Profile for Edge
+profilePath = "profile-work"
+Start-Process -FilePath "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" -ArgumentList "--profile-directory=$profilePath --no-first-run --no-default-browser-check"
+
+# Starship Configuration
+New-Item -Path '~\' -ItemType Directory -Name '.starship'
+New-Item -ItemType SymbolicLink -Path "~\.dotfiles-windows\starship.toml" -Target "~\.starship\starship.toml"
+
 ### MANUAL TASKS ###
 <#
+I should be creating Symlinks rather than copying items!!
+
 Install RUDR
 Install Visio x64
 Install MS Project x64
@@ -184,10 +204,8 @@ Log into Azure CLI
 Log into Cloud Shell
 Log Into Github
 Create Unix User(s)
-Create Edge Profiles for Work, Personal etc..
 Move-Location of Videos Folder to .\OneDrive
 Move-location of Pictures Folder to .\OneDrive
-Copy Windows Terminal profile.json Settings In
 Set Visual Studio to open blank project by default
 Change Visual Studio save folder to be ~\Repositories
 Add git.ico Logo to ~\Repositories folder
