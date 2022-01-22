@@ -178,8 +178,8 @@ New-ItemProperty -path $RegKey -name { 645FF040-5081-101B-9F08-00AA002F954E } -v
 # Copy Windows Terminal Settings
 Copy-Item -Path ".\windows-terminal\settings.json" -Destination "C:\Users\$env:UserName\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json" 
 
-# Copy PowerShell Profile
-Copy-Item -Path .\powershell-profile\Microsoft.PowerShell_profile.ps1 -Destination "C:\Users\$env:USERNAME\Documents\PowerShell"
+# Create PowerShell Profile Symlink
+New-Item -ItemType SymbolicLink -Path "C:\Users\$env:USERNAME\Documents\PowerShell\Microsoft.PowerShell_profile.ps1" -Target "C:\Users\$env:USERNAME\.dotfiles-windows\powershell-profile\Microsoft.PowerShell_profile.ps1" 
 
 # Create Personal Profile for Edge
 profilePath = "profile-personal"
@@ -191,18 +191,21 @@ Start-Process -FilePath "C:\Program Files (x86)\Microsoft\Edge\Application\msedg
 
 # Starship Configuration
 New-Item -Path '~\' -ItemType Directory -Name '.starship'
-New-Item -ItemType SymbolicLink -Path "~\.dotfiles-windows\starship.toml" -Target "~\.starship\starship.toml"
+New-Item -ItemType SymbolicLink -Path "C:\Users\$env:USERNAME\.starship\starship.toml" -Target "C:\Users\$env:USERNAME\.dotfiles-windows\starship.toml" 
+
+# Log Into Github
+gh auth login
+
+# Log in to Azure CLI
+az login
 
 ### MANUAL TASKS ###
 <#
 I should be creating Symlinks rather than copying items!!
 
-Install RUDR
 Install Visio x64
 Install MS Project x64
-Log into Azure CLI
 Log into Cloud Shell
-Log Into Github
 Create Unix User(s)
 Move-Location of Videos Folder to .\OneDrive
 Move-location of Pictures Folder to .\OneDrive

@@ -1,11 +1,13 @@
 #$env:AZ_ENABLED = $true
 $ENV:STARSHIP_CONFIG = "$HOME\.starship\starship.toml"
+
+Invoke-Expression (&starship init powershell)
 if ($PSVersionTable.PSVersion.Minor -gt 1) {
     Import-Module Az.Tools.Predictor
     Set-PSReadLineOption -PredictionSource Plugin
     Set-PSReadLineOption -PredictionViewStyle ListView
 }
-oh-my-posh --init --shell pwsh --config "C:\Users\Liam\Documents\PowerShell\liamfoneill.omp.json" | Invoke-Expression
+# oh-my-posh --init --shell pwsh --config "C:\Users\Liam\Documents\PowerShell\liamfoneill.omp.json" | Invoke-Expression
 Import-Module -Name Terminal-Icons
 Import-Module -Name PSReadline
 

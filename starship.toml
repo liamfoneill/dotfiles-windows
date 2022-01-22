@@ -1,0 +1,48 @@
+[username]
+style_root = "bold red"
+style_user = "#FFFFFF"
+format = "[](fg:#0078D4 bg:#2C001E)[$user](bg:#0078D4)[](fg:#0078D4 bg:#2C001E)"
+disabled = false
+show_always = true
+
+[directory]
+style = "fg:#FFFFFF bg:#0078D4"
+format = "[](fg:#2C001E bg:#0078D4)[$path[$read_only]($style)]($style)[](fg:#0078D4 bg:#2C001E)"
+read_only = ""
+home_symbol = "  ~"
+
+[azure]
+style = "fg:#FFFFFF bg:#0078D4"
+disabled = false
+format = "[](fg:#2C001E bg:#0078D4)[$symbol($subscription)]($style)[](fg:#0078D4 bg:#2C001E)"
+symbol = "ﴃ "
+
+[dotnet]
+symbol = "🥅 "
+style = "green"
+heuristic = false
+
+[git_branch]
+symbol = "🌱 "
+truncation_length = 4
+truncation_symbol = ""
+
+[docker_context]
+format = "via [🐋 $context](blue bold)"
+
+[terraform]
+format = "[🏎💨 $workspace]($style) "
+
+[kubernetes]
+format = 'on [⛵ $context \($namespace\)](dimmed green) '
+disabled = false
+
+[sudo]
+style = "bold green"
+symbol = "👩‍💻 "
+disabled = false
+allow_windows = true
+
+[cmd_duration]
+min_time = 500
+format = "took [$duration](bold yellow)"
