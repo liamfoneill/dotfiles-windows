@@ -10,7 +10,7 @@ param (
     [string[]]$WSLDistributions = @("Ubuntu", "Debian"),
     
     [Parameter(HelpMessage = "Install Packages?")]
-    [bool]$InstallPackages = true,
+    [switch]$InstallPackages,
 
     [Parameter(HelpMessage = "Path to Winget Import JSON file")]
     [string]$WingetImportFile = ".\winget-packages\winget-common.json",
