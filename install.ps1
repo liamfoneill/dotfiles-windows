@@ -99,6 +99,9 @@ Get-Service ssh-agent | Set-Service -StartupType Automatic -PassThru | Start-Ser
 ###############################################################################
 ### Windows Subsystem for Linux                                               #
 ###############################################################################
+Write-Host "Enable Hyper-V" -ForegroundColor "Yellow"
+Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
+
 Write-Host "Enable Windows Subsystem for Linux" -ForegroundColor "Yellow"
 Write-Host "Setting WSL Default Distribution to 2..." -ForegroundColor "Yellow"
 & "wsl" --set-default-version 2
@@ -176,9 +179,6 @@ Set-ItemProperty "HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU" "I
 $MU = New-Object -ComObject Microsoft.Update.ServiceManager -Strict
 $MU.AddService2("7971f918-a847-4430-9279-4a52d1efe18d", 7, "") | Out-Null
 Remove-Variable MU
-
-# Disable Recycle Bin
-New-ItemProperty -path $RegKey -name { 645FF040-5081-101B-9F08-00AA002F954E } -value 1 -PropertyType String
 
 # Copy Windows Terminal Settings
 Copy-Item -Path ".\windows-terminal\settings.json" -Destination "C:\Users\$env:UserName\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json" 
