@@ -90,7 +90,7 @@ if (!(Test-Path -Path '~\.ssh')) {
 
 # Setup Windows Service for SSH Agent
 Get-Service ssh-agent | Set-Service -StartupType Automatic -PassThru | Start-Service
-$ "start-ssh-agent.cmd"
+& "start-ssh-agent.cmd"
 
 
 ###############################################################################
