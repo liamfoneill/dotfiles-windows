@@ -84,12 +84,12 @@ Remove-Item -path ~\Desktop -include *.lnk -Recurse
 ### SSH Settings                                                        #
 ###############################################################################
 # Create a folder for .ssh
-if (!(Test-Path -Path '~\.ssh')) { 
-    New-Item -ItemType Directory -Path '~\.ssh' -Force 
+if (!(Test-Path -Path "C:\Users\$env:USERNAME\.ssh")) { 
+    New-Item -ItemType Directory -Path "C:\Users\$env:USERNAME\.ssh" -Force 
 }
 
 # Create SSH Key
-& "ssh-keygen" -t ed25519  -f ~\.ssh\ed25519 -C $ComputerName -q -N '""'
+& "ssh-keygen" -t ed25519  -f "C:\Users\$env:USERNAME\.ssh\ed25519" -C $ComputerName -q -N '""'
 
 # Setup Windows Service for SSH Agent
 Get-Service ssh-agent | Set-Service -StartupType Automatic -PassThru | Start-Service
