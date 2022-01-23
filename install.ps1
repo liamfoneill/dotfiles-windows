@@ -9,8 +9,8 @@ param (
     [ValidateSet("Ubuntu", "Debian", "kali-linux", "openSUSE-42", "SLES-12", "Ubuntu-16.04", "Ubuntu-18.04", "Ubuntu-20.04")]
     [string[]]$WSLDistributions = @("Ubuntu", "Debian"),
     
-    [Parameter(HelpMessage = "Install Packages?"]
-    [bool]$InstallPackages = true
+    [Parameter(HelpMessage = "Install Packages?")]
+    [bool]$InstallPackages = true,
 
     [Parameter(HelpMessage = "Path to Winget Import JSON file")]
     [string]$WingetImportFile = ".\winget-packages\winget-common.json",
