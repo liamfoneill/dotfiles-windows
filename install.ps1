@@ -86,11 +86,11 @@ if (!(Test-Path -Path '~\.ssh')) {
 }
 
 # Create SSH Key
-& "ssh-keygen" -t ed25519  -f ~\.ssh\ed25519 -C $ComputerName -q -N '""'
+& "ssh-keygen" -t ed25519  -f C:\Users\$env:USERNAME\.ssh\ed25519 -C $ComputerName -q -N '""'
 
 # Setup Windows Service for SSH Agent
 Get-Service ssh-agent | Set-Service -StartupType Automatic -PassThru | Start-Service
-& "start-ssh-agent.cmd"
+# & "start-ssh-agent.cmd"
 
 
 ###############################################################################
