@@ -8,6 +8,9 @@ param (
     [Parameter(HelpMessage = "A list of linux distributions you wish to enable")]
     [ValidateSet("Ubuntu", "Debian", "kali-linux", "openSUSE-42", "SLES-12", "Ubuntu-16.04", "Ubuntu-18.04", "Ubuntu-20.04")]
     [string[]]$WSLDistributions = @("Ubuntu", "Debian"),
+    
+    [Parameter(HelpMessage = "Install Packages?"]
+    [bool]$InstallPackages = true
 
     [Parameter(HelpMessage = "Path to Winget Import JSON file")]
     [string]$WingetImportFile = ".\winget-packages\winget-common.json",
@@ -81,8 +84,8 @@ Remove-Item -path ~\Desktop -include *.lnk -Recurse
 ### SSH Settings                                                        #
 ###############################################################################
 # Create a folder for .ssh
-if (!(Test-Path -Path '~\.ssh')) { 
-    New-Item -ItemType Directory -Path '~\.ssh' -Force 
+if (!(Test-Path -Path 'C:\Users\$env:USERNAME\.ssh')) { 
+    New-Item -ItemType Directory -Path 'C:\Users\$env:USERNAME\.ssh' -Force 
 }
 
 # Create SSH Key
@@ -112,6 +115,8 @@ foreach ($WSLDistribution in $WSLDistributions) {
 ###############################################################################
 ### Software Installation                                                     #
 ###############################################################################
+
+if ($InstallPackages) {
 Write-Host "Installing Chocolately..." -ForegroundColor "Yellow"
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 Set-ExecutionPolicy Unrestricted -Scope Process -Force
@@ -124,7 +129,7 @@ Write-Host "Importing Winget Packages..." -ForegroundColor "Yellow"
 
 # DAPR
 powershell -Command "iwr -useb https://raw.githubusercontent.com/dapr/cli/master/install/install.ps1 | iex"
-
+}
 ###############################################################################
 ### Default Windows Applications                                              #
 ###############################################################################
