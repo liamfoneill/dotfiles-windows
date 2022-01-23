@@ -100,7 +100,7 @@ Get-Service ssh-agent | Set-Service -StartupType Automatic -PassThru | Start-Ser
 ### Windows Subsystem for Linux                                               #
 ###############################################################################
 Write-Host "Enable Hyper-V" -ForegroundColor "Yellow"
-Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
+Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All -NoRestart
 
 Write-Host "Enable Windows Subsystem for Linux" -ForegroundColor "Yellow"
 Write-Host "Setting WSL Default Distribution to 2..." -ForegroundColor "Yellow"
