@@ -1,13 +1,13 @@
 <#
 .SYNOPSIS
-This script configured a fresh install of Windows.
+This script configures a fresh install of Windows.
 .DESCRIPTION
 This script is intended to be used to take a brand new install of Windows and configure the default settings to set it up for development and setup things like Windows Subsystem for Linux (WSL), Docker and installs programs and tools with Chocolately and Winget.
 .EXAMPLE
 .\install.ps1 -ComputerName "liam-desktop" -WSLDistributions "Ubuntu, Debian" -InstallPackages -ComputerType "Physical"
 Sets the computer name, installs Ubuntu and Debian WSL distros and installs the default packages for a bare metal install
 .EXAMPLE
-.\install.ps1
+.\install.ps1 -ComputerName "liam-desktop"
 Installs using the default parameters.  If you aren't Liam, you shouldn't be using it this way :)
 .EXAMPLE
 .\install.ps1 -ComputerName "liam-laptop" -WSLDistributions "Ubuntu" ComputerType "Physical"
