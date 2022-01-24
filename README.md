@@ -31,7 +31,7 @@ cd C:\Users\$env:USERNAME\.dotfiles-windows
 ```
 4. Run the install.ps1 script making sure to pass in parameters that make sense for you. 
 ```
-.\install.ps1
+.\install.ps1 -ComputerName "liam-vm" -ComputerType "Virtual" -WSLDistributions "Ubuntu -InstallPackages"
 ```
 
 5. RELAX!
