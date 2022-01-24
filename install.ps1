@@ -1,9 +1,29 @@
+<#
+.SYNOPSIS
+This script configured a fresh install of Windows.
+.DESCRIPTION
+This script is intended to be used to take a brand new install of Windows and configure the default settings to set it up for development and setup things like Windows Subsystem for Linux (WSL), Docker and installs programs and tools with Chocolately and Winget.
+.EXAMPLE
+.\install.ps1 -ComputerName "liam-desktop" -WSLDistributions "Ubuntu, Debian" -InstallPackages -ComputerType "Physical"
+Sets the computer name, installs Ubuntu and Debian WSL distros and installs the default packages for a bare metal install
+.EXAMPLE
+.\install.ps1
+Installs using the default parameters.  If you aren't Liam, you shouldn't be using it this way :)
+.EXAMPLE
+.\install.ps1 -ComputerName "liam-laptop" -WSLDistributions "Ubuntu" ComputerType "Physical"
+Sets the computer name, installs Ubuntu distro and doesn't install any package for a bare-metal install. 
+.EXAMPLE
+.\install.ps1 -ComputerName "liam-virtualmachine" -WSLDistributions "Ubuntu" ComputerType "Virtual"
+Sets the computer name, installs Ubuntu distro and doesn't install any package for a virtualised install. 
+.NOTES 
+Created by Liam F. O'Neill. Please create an issue at the original repo location if you have any questions or would like to contribute: https://github.com/liamfoneill/dotfiles-windows.
+#>
+
 [CmdletBinding()]
 param (
     [Parameter(Mandatory = $true, HelpMessage = "A name from 3 to 15 characters for your Windows PC.")]
     [ValidateLength(3, 15)]
     [string]$ComputerName = "liam-desktop",
-
 
     [Parameter(HelpMessage = "A list of linux distributions you wish to enable")]
     [ValidateSet("Ubuntu", "Debian", "kali-linux", "openSUSE-42", "SLES-12", "Ubuntu-16.04", "Ubuntu-18.04", "Ubuntu-20.04")]
@@ -121,17 +141,35 @@ foreach ($WSLDistribution in $WSLDistributions) {
 
 if ($InstallPackages) {
 Write-Host "Installing Chocolately..." -ForegroundColor "Yellow"
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 Set-ExecutionPolicy Unrestricted -Scope Process -Force
 choco feature enable -n allowGlobalConfirmation
 
 & "choco" install cascadiacode terraform starship #These packages are unfortunately still not on Winget as Winget
 
+$ "choco" install visualstudio2022enterprise 
+$ "choco" install visualstudio2022-workload-azure
+$ "choco" install visualstudio2022-workload-data
+$ "choco" install visualstudio2022-workload-datascience
+$ "choco" install visualstudio2022-workload-manageddesktop
+# $ "choco" install visualstudio2022-workload-managedgame
+# $ "choco" install visualstudio2022-workload-nativecrossplat
+# $ "choco" install visualstudio2022-workload-nativedesktop
+# $ "choco" install visualstudio2022-workload-nativegame
+# $ "choco" install visualstudio2022-workload-nativemobile
+# $ "choco" install visualstudio2022-workload-netcrossplat
+$ "choco" install visualstudio2022-workload-netweb
+$ "choco" install visualstudio2022-workload-node
+# $ "choco" install visualstudio2022-workload-office
+$ "choco" install visualstudio2022-workload-python
+# $ "choco" install visualstudio2022-workload-universal
+# $ "choco" install visualstudio2022-workload-visualstudioextension
+
 Write-Host "Importing Winget Packages..." -ForegroundColor "Yellow"
 & "winget" import --import-file $WingetImportFile --accept-package-agreements --accept-source-agreements
 
 # DAPR
-powershell -Command "iwr -useb https://raw.githubusercontent.com/dapr/cli/master/install/install.ps1 | iex"
+powershell -Command "invoke-webrequest -useb https://raw.githubusercontent.com/dapr/cli/master/install/install.ps1 | invoke-expression"
 
 Write-Host "Login to Github CLI..." -ForegroundColor "Yellow"
 gh auth login
@@ -192,8 +230,9 @@ Remove-Variable MU
 Write-Host "Creating Symlink for Windows Terminal Settings..." -ForegroundColor "Yellow" 
 New-Item -ItemType SymbolicLink -Path "C:\Users\$env:UserName\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json" -Target ".\windows-terminal\settings.json" 
 
+# NOTE: The reason we are copying the profile instead of symlink is because it is location in the documents folder which typically gets synced to OneDrive for most users
 Write-Host "Creating Symlink for PowerShell Profile..." -ForegroundColor "Yellow" 
-New-Item -ItemType SymbolicLink -Path "C:\Users\$env:USERNAME\Documents\PowerShell\Microsoft.PowerShell_profile.ps1" -Target "C:\Users\$env:USERNAME\.dotfiles-windows\powershell-profile\Microsoft.PowerShell_profile.ps1" 
+Copy-Item -Destination "C:\Users\$env:USERNAME\Documents\PowerShell\Microsoft.PowerShell_profile.ps1" -Path "C:\Users\$env:USERNAME\.dotfiles-windows\powershell-profile\Microsoft.PowerShell_profile.ps1" 
 
 Write-Host "Creating Symlink for Starship..." -ForegroundColor "Yellow"
 New-Item -Path '~\' -ItemType Directory -Name '.starship'
@@ -210,7 +249,6 @@ Start-Process -FilePath "C:\Program Files (x86)\Microsoft\Edge\Application\msedg
 ### MANUAL TASKS ###
 <#
 I should be creating Symlinks rather than copying items!!
-
 Install Visio x64
 Install MS Project x64
 Log into Cloud Shell
