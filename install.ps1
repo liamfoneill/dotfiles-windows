@@ -132,28 +132,34 @@ Write-Host "Importing Winget Packages..." -ForegroundColor "Yellow"
 
 # DAPR
 powershell -Command "iwr -useb https://raw.githubusercontent.com/dapr/cli/master/install/install.ps1 | iex"
+
+Write-Host "Login to Github CLI..." -ForegroundColor "Yellow"
+gh auth login
+
+Write-Host "Login to Azure CLI..." -ForegroundColor "Yellow"
+az login
 }
 ###############################################################################
 ### Default Windows Applications                                              #
 ###############################################################################
 
-# Uninstall Bing News
+Write-Host "Uninstall Bing News..." -ForegroundColor "Yellow"
 Get-AppxPackage "Microsoft.BingNews" -AllUsers | Remove-AppxPackage
 Get-AppXProvisionedPackage -Online | Where-Object DisplayName -like "Microsoft.BingNews" | Remove-AppxProvisionedPackage -Online
 
-# Uninstall Microsoft Teams (Personal)
+Write-Host "Uninstall Microsoft Teams (Personal)..." -ForegroundColor "Yellow" 
 Get-AppxPackage "MicrosoftTeams" -AllUsers | Remove-AppxPackage
 Get-AppXProvisionedPackage -Online | Where-Object DisplayName -like "MicrosoftTeams" | Remove-AppxProvisionedPackage -Online
 
-# Uninstall Solitaire
+Write-Host "Uninstall Solitaire..." -ForegroundColor "Yellow"
 Get-AppxPackage "Microsoft.MicrosoftSolitaireCollection" -AllUsers | Remove-AppxPackage
 Get-AppXProvisionedPackage -Online | Where-Object DisplayName -like "Microsoft.MicrosoftSolitaireCollection" | Remove-AppxProvisionedPackage -Online
 
-# Uninstall Groove (Formerly Zune) Music 
+Write-Host "Uninstall Groove (Formerly Zune) Music..." -ForegroundColor "Yellow"
 Get-AppxPackage "Microsoft.ZuneMusic" -AllUsers | Remove-AppxPackage
 Get-AppXProvisionedPackage -Online | Where-Object DisplayName -like "Microsoft.ZuneMusic" | Remove-AppxProvisionedPackage -Online
 
-# Prevent "Suggested Applications" from returning
+Write-Host "Prevent "Suggested Applications" from returning..." -ForegroundColor "Yellow" 
 if (!(Test-Path "HKLM:\Software\Policies\Microsoft\Windows\CloudContent")) { New-Item -Path "HKLM:\Software\Policies\Microsoft\Windows\CloudContent" -Type Folder | Out-Null }
 Set-ItemProperty "HKLM:\Software\Policies\Microsoft\Windows\CloudContent" "DisableWindowsConsumerFeatures" 1
 
@@ -162,29 +168,36 @@ Set-ItemProperty "HKLM:\Software\Policies\Microsoft\Windows\CloudContent" "Disab
 ###############################################################################
 Write-Host "Configuring Windows Update..." -ForegroundColor "Yellow"
 
-# Ensure Windows Update registry paths
+Write-Host "Ensure Windows Update registry paths..." -ForegroundColor "Yellow" 
 if (!(Test-Path "HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate")) { New-Item -Path "HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate" -Type Folder | Out-Null }
 if (!(Test-Path "HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU")) { New-Item -Path "HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU" -Type Folder | Out-Null }
 
-# Enable Automatic Updates
+Write-Host "Enable Automatic Updates..." -ForegroundColor "Yellow" 
 Set-ItemProperty "HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU" "NoAutoUpdate" 0
 
 # Configure to Auto-Download but not Install: NotConfigured: 0, Disabled: 1, NotifyBeforeDownload: 2, NotifyBeforeInstall: 3, ScheduledInstall: 4
 Set-ItemProperty "HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU" "AUOptions" 3
 
-# Include Recommended Updates
+Write-Host "Include Recommended Updates..." -ForegroundColor "Yellow" 
 Set-ItemProperty "HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU" "IncludeRecommendedUpdates" 1
 
-# Opt-In to Microsoft Update
+Write-Host "Opt-In to Microsoft Update..." -ForegroundColor "Yellow" 
 $MU = New-Object -ComObject Microsoft.Update.ServiceManager -Strict
 $MU.AddService2("7971f918-a847-4430-9279-4a52d1efe18d", 7, "") | Out-Null
 Remove-Variable MU
 
-# Copy Windows Terminal Settings
-Copy-Item -Path ".\windows-terminal\settings.json" -Destination "C:\Users\$env:UserName\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json" 
+###############################################################################
+### Symlink App Settings                                                      #
+###############################################################################
+Write-Host "Creating Symlink for Windows Terminal Settings..." -ForegroundColor "Yellow" 
+New-Item -ItemType SymbolicLink -Path "C:\Users\$env:UserName\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json" -Target ".\windows-terminal\settings.json" 
 
-# Create PowerShell Profile Symlink
+Write-Host "Creating Symlink for PowerShell Profile..." -ForegroundColor "Yellow" 
 New-Item -ItemType SymbolicLink -Path "C:\Users\$env:USERNAME\Documents\PowerShell\Microsoft.PowerShell_profile.ps1" -Target "C:\Users\$env:USERNAME\.dotfiles-windows\powershell-profile\Microsoft.PowerShell_profile.ps1" 
+
+Write-Host "Creating Symlink for Starship..." -ForegroundColor "Yellow"
+New-Item -Path '~\' -ItemType Directory -Name '.starship'
+New-Item -ItemType SymbolicLink -Path "C:\Users\$env:USERNAME\.starship\starship.toml" -Target "C:\Users\$env:USERNAME\.dotfiles-windows\starship.toml" 
 
 # Create Personal Profile for Edge
 profilePath = "profile-personal"
@@ -193,16 +206,6 @@ Start-Process -FilePath "C:\Program Files (x86)\Microsoft\Edge\Application\msedg
 # Create Work Profile for Edge
 profilePath = "profile-work"
 Start-Process -FilePath "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" -ArgumentList "--profile-directory=$profilePath --no-first-run --no-default-browser-check"
-
-# Starship Configuration
-New-Item -Path '~\' -ItemType Directory -Name '.starship'
-New-Item -ItemType SymbolicLink -Path "C:\Users\$env:USERNAME\.starship\starship.toml" -Target "C:\Users\$env:USERNAME\.dotfiles-windows\starship.toml" 
-
-# Log Into Github
-gh auth login
-
-# Log in to Azure CLI
-az login
 
 ### MANUAL TASKS ###
 <#
@@ -220,5 +223,4 @@ Add git.ico Logo to ~\Repositories folder
 Configure OneDrive + OneDrive for Business
 Disable Recycle Bin Icon
 Remove suggested items from Quick Access
-Install Post-Git, oh-my-posh etc on PowerShell 7
 #>
