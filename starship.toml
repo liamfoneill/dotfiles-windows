@@ -14,7 +14,7 @@ home_symbol = "  ~"
 [azure]
 style = "fg:#FFFFFF bg:#0078D4"
 disabled = false
-format = "[](fg:#2C001E bg:#0078D4)[$symbol($subscription)]($style)[](fg:#0078D4 bg:#2C001E)"
+format = "[](fg:#2C001E bg:#0078D4)[$symbol($subscription)]($style)[](fg:#0078D4 bg:none)"
 symbol = "ﴃ "
 
 [dotnet]
