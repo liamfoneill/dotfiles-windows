@@ -1,21 +1,25 @@
 [username]
 style_root = "bold red"
-style_user = "#FFFFFF"
-format = "[](fg:#0078D4 bg:#2C001E)[$user](bg:#0078D4)[](fg:#0078D4 bg:#2C001E)"
+style_user = "fg:#0078D4 bg: white"
+format = "[](fg:#0078D4 bg:none)[$user]($style)[](fg:#0078D4 bg:none)"
 disabled = false
-show_always = true
+show_always = false
 
 [directory]
 style = "fg:#FFFFFF bg:#0078D4"
-format = "[](fg:#2C001E bg:#0078D4)[$path[$read_only]($style)]($style)[](fg:#0078D4 bg:#2C001E)"
+format = "[](fg:#0078D4 bg:none inverted)[$path[$read_only]($style)]($style)[](fg:#0078D4 bg:none)"
 read_only = ""
-home_symbol = "  ~"
+home_symbol = "~"
+truncation_length = 3
+truncation_symbol = "…/"
+truncate_to_repo = true
+disabled = false
 
 [azure]
 style = "fg:#FFFFFF bg:#0078D4"
 disabled = false
-format = "[](fg:#2C001E bg:#0078D4)[$symbol($subscription)]($style)[](fg:#0078D4 bg:none)"
-symbol = "ﴃ "
+format = "[](fg:#012456 bg:#0078D4)[$symbol($subscription)]($style)[](fg:#0078D4 bg:none)"
+symbol = "☁️ "
 
 [dotnet]
 symbol = "🥅 "
@@ -23,7 +27,7 @@ style = "green"
 heuristic = false
 
 [git_branch]
-symbol = "🌱 "
+symbol = " "
 truncation_length = 4
 truncation_symbol = ""
 
@@ -34,8 +38,8 @@ format = "via [🐋 $context](blue bold)"
 format = "[🏎💨 $workspace]($style) "
 
 [kubernetes]
-format = 'on [⛵ $context \($namespace\)](dimmed green) '
-disabled = false
+format = 'K8S: [$context \($namespace\)](bright white) '
+disabled = true
 
 [sudo]
 style = "bold green"
