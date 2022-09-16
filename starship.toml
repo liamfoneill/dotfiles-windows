@@ -1,5 +1,5 @@
 [username]
-style_root = "bold red"
+style_root = "fg:white bg:#0078D4"
 style_user = "fg:#0078D4 bg: white"
 format = "[](fg:#0078D4 bg:none)[$user]($style)[](fg:#0078D4 bg:none)"
 disabled = false
